@@ -4,6 +4,8 @@ A request and the email it should send are stored in **one database transaction*
 
 The worker claims a row by updating `PENDING` to `SENDING` only when it is still `PENDING`. A second worker that loses that update does not send. This sample logs the delivery instead of calling a mail provider. A recipient ending in `@fail.test` is treated as a provider rejection and the row becomes `FAILED`.
 
+The transaction boundary and the worker are in [docs/architecture.md](docs/architecture.md).
+
 On PostgreSQL, the same claim is usually `SELECT … FOR UPDATE SKIP LOCKED`. The update-if-pending claim here runs on H2 so the sample needs no database server.
 
 ## Run
